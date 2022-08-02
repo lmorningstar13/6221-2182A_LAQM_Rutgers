@@ -16,5 +16,7 @@ Our next steps are to
 [Installation tips]
 
 -Keithley driver is required for proper use. Here is a helpful guide: https://download.tek.com/manual/KUSB-488B-903-01_Sept2018_KUSB-488B-903-01B.pdf
+
 -Pymeasure was used for the consol log feature. However, it is not necessary to run properly. The code will work fine if you remove any lines starting with log.info and the corresponding imports
+
 -If you are having trouble connecting with the instruments, this may be an issue regarding pyvisa
