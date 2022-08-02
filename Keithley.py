@@ -123,7 +123,6 @@ def finished(file_name):
         writer = csv.writer(f)
         writer.writerow(header)
         writer.writerows(data)
-    print('checkpoint 4')
     
     
 def resetforDeltareadings():
