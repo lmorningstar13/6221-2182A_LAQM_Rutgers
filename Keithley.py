@@ -137,7 +137,7 @@ if __name__ == "__main__":
     while i<10:
         console_log(log)
         
-        new_name = 'night_data_' + str(i)
+        new_name = 'data_from_delta_measurement_' + str(i)
         
         first_step()
     
