@@ -1,4 +1,4 @@
-# K6221-2182A_LAQM_Rutgers
+# 6221-2182A_LAQM_Rutgers
 
 [Overview] 
 
