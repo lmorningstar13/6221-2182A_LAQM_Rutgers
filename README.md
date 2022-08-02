@@ -2,7 +2,7 @@
 
 [Overview] 
 
-This code is for using Keithley instruments 6221 and 2182A to perform a delta measurement and save the data with little human interaction. As of 08/02/2022, this code will run and collect data for a delta measurement into ten files, each file holding 65536 data points (the maximum data the 6221 instrument buffer can contain), over a time period of 25 hours after the code is ran. Our goal is to create a user-friendly interface that can complete multiple measurments indefinitely for these instruments. 
+This code is for using Keithley instruments 6221 and 2182A to perform a delta measurement and save the data with little human interaction. As of 08/02/2022, this code will run and collect data for a delta measurement into ten files, each file holding 65536 data points (the maximum data the 6221 instrument buffer can contain), over a time period of 25 hours after the user runs the file. Our goal is to create a user-friendly interface that can complete multiple measurments indefinitely for these instruments. 
 
 This code is the product programmed by undergraduate researcher Libby Morningstar under the supervision of Tsung-Chi Wu, Dr. Jak Chakhalian, & Dr. Mikhail Kareev of the LAQM at Rutgers University. This was completed under the guidance of the PhD candidate, Tsung-Chi Wu, who served as a research mentor for the project.
 
