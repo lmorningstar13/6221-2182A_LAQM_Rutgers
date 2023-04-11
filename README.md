@@ -15,7 +15,7 @@ These files were programmed by undergraduate researchers Libby Morningstar and N
 We undertstand this is not perfected and encourage everyone to collaborate with us to improve it.
 
 Our next steps are to
-1. Add other measurement types such as the 2-W technique (this is in progress but untested as of 04/11/2023)
+1. Test other measurement types such as the 2-W technique
 2. Add a live plot
 3. Make a user-friendly interface
 
@@ -26,3 +26,7 @@ Our next steps are to
 -Pymeasure was used for the consol log feature. However, it is not necessary to run properly. The code will work fine if you remove any lines starting with log.info and the corresponding imports
 
 -If you are having trouble connecting with the instruments, this may be an issue regarding pyvisa (the FAQ is active and very helpful)
+
+-For any problems with code, setting up instruments, or any other general questions contact 
+
+-Contact Nidhish Sharma - *ns1300@scarletmail.rutgers.edu* for help with setting up instruments, code errors, or any other general questions. 
