@@ -19,7 +19,7 @@ Our next steps are to
 2. Add a live plot
 3. Make a user-friendly interface
 
-[Installation tips]
+**[Installation tips]**
 
 -Keithley driver is required for proper use. Here is a helpful guide: https://download.tek.com/manual/KUSB-488B-903-01_Sept2018_KUSB-488B-903-01B.pdf
 
