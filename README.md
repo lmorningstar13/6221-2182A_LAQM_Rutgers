@@ -27,6 +27,4 @@ Our next steps are to
 
 -If you are having trouble connecting with the instruments, this may be an issue regarding pyvisa (the FAQ is active and very helpful)
 
--For any problems with code, setting up instruments, or any other general questions contact 
-
 -Contact Nidhish Sharma - *ns1300@scarletmail.rutgers.edu* for help with setting up instruments, code errors, or any other general questions. 
