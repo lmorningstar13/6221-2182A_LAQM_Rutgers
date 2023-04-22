@@ -17,7 +17,10 @@ import numpy as np
 import logging as log
 import pandas as pd
 
+#to manually change which device/method, uncomment change this checker variable
+#0 for delta mode, 1 for lock-in, 2 for pulse delta
 #checker = 0
+
 rm = pyvisa.ResourceManager()
 global starttime 
 starttime1 = time.time()
@@ -34,9 +37,6 @@ else:
     
 my_model_335 = Model335(57600)
 
-
-checker = 2
-#for automatically doing pulse mode
 
 #create global variables for inputting values
 global L
@@ -64,11 +64,7 @@ def getparameters():
     
 
 def autosensitivity(channel1x):
-    #check time value if accurate? can use timeperf command in each loop print out the time and make sure it's 0.1 seconds
     
-    #WHEN MULTIPLY BY TEN DO I NEED TO CONVERT THE TEN VALUE? ARE THE SENSITIVITY VALUES CORRECT?
-    #have to wait after adjusting the sensitivity every time?
-    #when changing voltage need time for it to reach a value, otherwise won't be accurate but then cannnot make time intervals smaller
     sensitivityold = {0: "2 nV/fA",		13: "50 uV/pA",
                     1: "5 nV/fA",		14: "100 uV/pA",
                     2: "10 nV/fA",	    15: "200 uV/p                                                                                                                                    ",
@@ -95,7 +91,7 @@ def autosensitivity(channel1x):
     count = 0
     for x in sensitivity:
             i = (newvalue - x)
-            #print(i)
+            
             if(i >= 0):
                 xmax.append(i)
             else:
@@ -105,48 +101,7 @@ def autosensitivity(channel1x):
     #print(minimumindex)
     #print(sensitivity[minimumindex])
     return minimumindex     
-    
-    #check time value if accurate? can use timeperf command in each loop print out the time and make sure it's 0.1 seconds
-    
-    #WHEN MULTIPLY BY TEN DO I NEED TO CONVERT THE TEN VALUE? ARE THE SENSITIVITY VALUES CORRECT?
-    #have to wait after adjusting the sensitivity every time?
-    #when changing voltage need time for it to reach a value, otherwise won't be accurate but then cannnot make time intervals smaller
-    sensitivityold = {0: "2 nV/fA",		13: "50 uV/pA",
-                    1: "5 nV/fA",		14: "100 uV/pA",
-                    2: "10 nV/fA",	    15: "200 uV/p                                                                                                                                    ",
-                    3: "20 nV/fA",	    16: "500 uV/pA",
-                    4: "50 nV/fA",	    17: "1 mV/nA",
-                    5: "100 nV/fA",	    18: "2 mV/nA",
-                    6: "200 nV/fA",	    19: "5 mV/nA",
-                    7: "500 nV/fA",	    20: "10 mV/nA",
-                    8: "1 uV/pA",		21: "20 mV/nA",
-                    9: "2 uV/pA",		22: "50 mV/nA",
-                    10: "5 uV/pA",		23: "100 mV/nA",
-                    11: "10 uV/pA",	    24: "200 mV/nA",
-                    12: "20 uV/pA",	    25: "500 mV/nA",
-                    26: "1 V/uA"}
-    
-    newvalue = 10*(channel1x)
-
-
-    sensitivity = [(2*10**-9), 5*10**-9, (1*10**-8), 2*10**-8, 5*10**-8, 1*10**-7, 2*10**-7, 5*10**-7, 
-                   1*10**-6, 2*10**6, 5*10**-6, 1*10**-15, 2*10**-15, 5*10**-15, 1*10**-15, 2*10**-15, 5*10**-15,
-                   1*10**-3, 2*10**-3, 5*10**-3, 1*10**-2, 2*10**-2, 5*10**-2, 1*10**-1, 2*10**-1, 5*10**-1]
-
-    xmax = []
-    count = 0
-    for x in sensitivity:
-            i = (newvalue - x)
-            #print(i)
-            if(i >= 0):
-                xmax.append(i)
-            else:
-                xmax.append(500)
-       
-    minimumindex = xmax.index(min(xmax))
-    #print(minimumindex)
-    #print(sensitivity[minimumindex])
-    return minimumindex     
+      
                
 def gettemperature():
     
@@ -276,24 +231,25 @@ def data_collect():
         rate = 1
         my_instrument.write('SYST:COMM:SER:SEND "VOLT:NPLC %f"' % rate) #Set rate to 1PLC for 2182a
         #my_instrument.query('SYST:COMM:SER:SEND "VOLT:NPLC?"') #send rate query
-            #my_instrument.query('SYST:COMM:SER:SEND: "ENT?"') #return response to query
+        #my_instrument.query('SYST:COMM:SER:SEND: "ENT?"') #return response to query
         log.info("VIntegration rate has been set to %f V" % rate)
             
 
         #setup6221Delta
         log.info("Beginning sequence to set up, arm, and run Delta")
         my_instrument.write('*RST') #restores 6221 defaults
-        my_instrument.write('SOUR:PDEL:HIGH 1e-6') #sets high source value to 1mA
-        #my_instrument.write('SOUR:PDEL:LOW -10e-6') #sets high source value to 1mA
-        my_instrument.write("SOUR:PDEL:SDEL 9.16e-4") #sets delta delay to 100 ms
-        my_instrument.write("SOUR:PDEL:WIDT 4.16e-3") #sets width to 100 ms
-        my_instrument.write('SOUR:PDEL:COUN 1') #Sets Delta count to 65536
+        my_instrument.write('SOUR:PDEL:HIGH 1e-6') #sets high source value 
+        #my_instrument.write('SOUR:PDEL:LOW -10e-6') #sets low source value 
+        my_instrument.write("SOUR:PDEL:SDEL 9.16e-4") #sets delta delay 
+        my_instrument.write("SOUR:PDEL:WIDT 4.16e-3") #sets width 
+        my_instrument.write('SOUR:PDEL:COUN 1') #Sets Delta count 
         #my_instrument.write('SOUR:DELT:CAB ON') #Enables compliance abort
-        my_instrument.write('TRAC:POIN 1')#sets buffer to 65536 points
+        my_instrument.write('TRAC:POIN 1')#sets buffer 
         log.info('Set up completed')
         my_instrument.write('SOUR:PDEL:ARM') #Arms Delta
         #armed = my_instrument.query('SOUR:DELT:ARM?') #queries if armed
         #armed = 1
+        
         print('current is ' + my_instrument.query('SOUR:PDEL:HIGH?'))
         with open('3-30keithleypulse.csv', mode='w', newline="") as csv_file:
 
@@ -324,7 +280,7 @@ def data_collect():
             #up to here it is 1.82 seconds
             
             
-            
+            #Remove the extra characters from the output values 
             temp = str(my_instrument.query('TRAC:DATA?'))
             print('data '+ temp)
             var = temp.replace('+', '')
@@ -361,7 +317,7 @@ def data_collect():
                
             
             
-            
+            #wait around 2 seconds between every measurement
             time.sleep(2)
             timevalue = timevalue + 2
             timevalue = round(timevalue, 2)
@@ -405,17 +361,18 @@ def data_collect():
             #setup6221Delta
             log.info("Beginning sequence to set up, arm, and run Delta")
             my_instrument.write('*RST') #restores 6221 defaults
-            my_instrument.write('SOUR:DELT:HIGH 5e-6') #sets high source value to 1mA
-            #my_instrument.write("SOUR:DELT:DEL 100e-3") #sets delta delay to 100 ms
-            my_instrument.write('SOUR:DELT:COUN 1') #Sets Delta count to 65536
+            my_instrument.write('SOUR:DELT:HIGH 5e-6') #sets high source value 
+            #my_instrument.write("SOUR:DELT:DEL 100e-3") #sets delta delay 
+            my_instrument.write('SOUR:DELT:COUN 1') #Sets Delta count 
             
+            #enable autorange feature
             my_instrument.write('SOUR:CURR:RANGE:AUTO 1')
-            print(my_instrument.query('SOUR:CURR:RANGE:AUTO?'))
+            #print(my_instrument.query('SOUR:CURR:RANGE:AUTO?'))
             my_instrument.write('SOUR:CURR:RANGE:AUTO 1')
 
             
             #my_instrument.write('SOUR:DELT:CAB ON') #Enables compliance abort
-            my_instrument.write('TRAC:POIN 1') #sets buffer to 65536 points
+            my_instrument.write('TRAC:POIN 1') #sets buffer 
             log.info('Set up completed')
             my_instrument.write('SOUR:DELT:ARM') #Arms Delta
             #armed = my_instrument.query('SOUR:DELT:ARM?') #queries if armed
@@ -526,6 +483,6 @@ if checker == 1:
 
 
 
-# sensitivity shoudl be higher than resistance value, find closest sensitivity but higher than the resistance
+
 #each iteration in the while loop takes 5.2 * 10^-6, so time taken to run loop is negigible
-#can do user input of sampling rate and let choose whether every 0.5 seconds, 0.1 seconds or whichever
+#can do user input of sampling rate and let choose whether every 0.5 seconds, 0.1 seconds, etc.
